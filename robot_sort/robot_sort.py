@@ -92,12 +92,78 @@ class SortingRobot:
         """
         return self._light == "ON"
 
+    def take_item(self):
+        self.set_light_on()
+        self.swap_item()
+
+    def drop_item(self):
+        self.set_light_off()
+        self.swap_item()
+
     def sort(self):
         """
         Sort the robot's list.
         """
         # Fill this out
-        pass
+
+        # This robot will implement a bubble sort
+        # The 1 bit of memory will be used to track whether we are holding at item
+        '''
+        Behavior
+        Light if we have a number in hand.
+        If number is in hand, can't break loop,
+        so light ON at end of list means keep looping.
+        If we have no number in hand, then we have not
+        felt the need to swap anything, so in that case
+        end the loop. (Depends on result of compare)
+        If you have something in hand and you find a number
+        bigger, you swap. If you are at the end of the list
+        and you have something in hand, then you are trying
+        to replace
+
+        So if light is on:
+        Only swap if compare is None or compare is -1
+
+        and if light is off:
+        Swap
+
+        and if cannot move right
+        Only swap if light is off and compare is None
+        If light is on and compare is none, swap
+        and end sort
+
+
+        LIGHT IS ON
+
+        [N, 4, 3]
+         5                                                                     
+        '''
+
+        self.set_light_on()
+        self.swap_item()
+
+        while self.light_is_on():
+            while self.can_move_right():
+
+                if self.light_is_on():
+                    if  self.compare_item() == None:
+                        self.drop_item()
+                    elif self.compare_item() == -1:
+                        self.swap_item()
+                else:
+                    self.take_item()
+                self.move_right()
+             
+            if not self.light_is_on():
+                self.take_item()
+            elif self.compare_item() == None and self.light_is_on():
+                self.drop_item()
+                break
+            elif self.light_is_on() and self.compare_item() == -1:
+                self.swap_item()
+            
+            while self.can_move_left():
+                self.move_left()
 
 
 if __name__ == "__main__":
@@ -109,4 +175,6 @@ if __name__ == "__main__":
     robot = SortingRobot(l)
 
     robot.sort()
+
+    print(robot._item)
     print(robot._list)
