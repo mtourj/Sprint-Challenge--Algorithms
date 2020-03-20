@@ -139,29 +139,49 @@ class SortingRobot:
          5                                                                     
         '''
 
+        # Start with item in hand
         self.set_light_on()
         self.swap_item()
 
+        # If item is in hand, keep looping
         while self.light_is_on():
+            # Until we reach end of list...
             while self.can_move_right():
 
                 if self.light_is_on():
                     if  self.compare_item() == None:
+                        # If item is in hand, and there is not
+                        # an item at this part of the list,
+                        # drop the item
                         self.drop_item()
                     elif self.compare_item() == -1:
+                        # If item is in hand, and item at this
+                        # part of list is larger, swap.
                         self.swap_item()
                 else:
+                    # If no item in hand, take one.
                     self.take_item()
+
                 self.move_right()
-             
+            
+            # If we have no item at the end of the list, we
+            # take on
             if not self.light_is_on():
                 self.take_item()
+            # If we have an item and there is no item at end of
+            # the list, then we place it there, and this
+            # would be the last number we sort, which means the
+            # largest number made it to the end of the list
+            # The list has been sorted!
             elif self.compare_item() == None and self.light_is_on():
                 self.drop_item()
                 break
+            # If we have an item and the item at the end of list is
+            # larger, we swap
             elif self.light_is_on() and self.compare_item() == -1:
                 self.swap_item()
             
+            # Move all the way back to the left
             while self.can_move_left():
                 self.move_left()
 
